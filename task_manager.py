@@ -1,4 +1,5 @@
-from ai import call_gpt
+from services.API_Response import *
+from datetime import datetime
 import os
 import json
 # Now, how will i store the tasks? WHat is a better data structure to use. Dictionary or List. Dictionaries have key-value pairs, 
@@ -12,16 +13,10 @@ import json
 # take in multiple tasks at once by parsing string and splitting at comma, 
 # port this project over to github, decompose this better i guess
 # store tasks in a csv file containing the following: completed, uncompleted, priority
-
-# IMPORTANT: if u port this over to git, you would have to (POSSIbLY) pay for the openai api
-
-    # finish these out
-    # test out how the tasks are read
 def read_tasks():
     tasks = list()
     with open("user_tasks.csv") as csv_tasks:
         csv_tasks.read()
-
     return tasks
 
     # test out how the tasks are appended to the task list
@@ -63,7 +58,7 @@ def main():
         print("Enter 3 to get AI suggestions")
         print("Enter 4 to view your tasks")
         print("Enter 5 to exit the Task Manager")
-        # lower is absolute unnecessary, but, in case of future vision, might be helpful
+        # lower is absolute unnecessary, but, in case of future, might be helpful
         user_decision = input("Please input your decision here: ").lower()
 
         if "1" in user_decision:
@@ -83,9 +78,9 @@ def main():
             print("You may get suggestions from chatGPT's AI of how to complete your tasks, how to schedule your tasks, and etc.\n")
             print("For the best responses from the AI, give as much detail as possible for what you plan to do.")
             user_decision_for_ai = input("Please input your instructions here for the AI to utilize: ")
-            response = call_gpt(f"Given the following tasks: {stored_tasks}, use the following instructions. {user_decision_for_ai}")
+            ai_response = gemini_response(f"Given the following tasks: {stored_tasks}, use the following instructions. {user_decision_for_ai}")
             print()
-            print(response)
+            print(ai_response)
             print()
         elif "5" in user_decision:
             print(f"Have a great day {user_name}!")

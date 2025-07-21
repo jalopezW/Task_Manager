@@ -1,0 +1,10 @@
+.env
+.pyc
+.pyo
+__pycache__/
+.DS_store
+cool_time_stuff.py
+exercises.py
+greet.txt
+API_response.py
+.log
