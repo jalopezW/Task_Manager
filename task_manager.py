@@ -1,34 +1,33 @@
-from services.API_Response import *
+from services.API_Response import gemini_response
 from datetime import datetime
 import os
 import json
-# Now, how will i store the tasks? WHat is a better data structure to use. Dictionary or List. Dictionaries have key-value pairs, 
-# while lists just store elements.
-# Dictionaries need keys to access their values, while lists need index.
-# basics to have in to do list thingy
-# add, delete, view tasks, and have gpty give suggestions
+import csv
+# Dictionaries have key-value pairs, lists store elements. Dictionaries need keys to access their values, while lists need index.
 # extensions:
-# put this on git and use vscode
+# put this on git and use vscode: Complete!
 # soothing music, possibly an image in background, view tasks that are completed, database to store tasks offline to complete, 
-# take in multiple tasks at once by parsing string and splitting at comma, 
-# port this project over to github, decompose this better i guess
-# store tasks in a csv file containing the following: completed, uncompleted, priority
+# take in multiple tasks at once by parsing string and splitting at comma, : NEXT!
+# port this project over to github: Complete!
+# decompose this better i guess: NEXT?
+# store tasks in a csv file containing the following: completed, uncompleted, priority: NEXT?
+
 def read_tasks():
-    tasks = list()
     with open("user_tasks.csv") as csv_tasks:
         csv_tasks.read()
-    return tasks
 
     # test out how the tasks are appended to the task list
-def write_tasks(new_user_task):
+def write_tasks(new_user_task: str):
         # the second parameter "a" appends a task to the end of the file
         # if we were to use write/"w" it would overwrite anything inside of the file
     with open("user_tasks.csv", "a") as writing_task:
         writing_task.write(new_user_task)
 
 def main():
+    if not os.path.exists("user_tasks.csv"):
+        with open("user_tasks.csv", "w") as f:
+            pass
     stored_tasks = read_tasks()
-    
     print("Welcome to your AI To-Do List Manager!")
     print("Please enter your name below or type \"exit\" to exit the task manager.")
     user_name = input("").capitalize()
@@ -38,18 +37,22 @@ def main():
         return
 
     while True:
+        # get rid of the stored tasks list????
         if not stored_tasks:
             print(f"Hi {user_name}. There are currently no tasks to complete.")
             new_task = input("Please enter a task here: ")
-            stored_tasks.append(new_task)
+            write_tasks(new_task)
         else:
             # might have to get rid of this else statement
-            # me think make this appear only when u want to see ur tasks, but I don't know
+            # make this appear only when u want to see ur tasks, but I don't know
+
+            # change this to read all the tasks in the csv file
             print("These are all the current tasks you have to complete!")
-            task_index = 0
-            while task_index < len(stored_tasks):
-                print(f"Task {task_index + 1}:", stored_tasks[task_index])
-                task +=1
+            read_tasks()
+            # task_index = 0
+            # while task_index < len(stored_tasks):
+            #     print(f"Task {task_index + 1}:", stored_tasks[task_index])
+            #     task +=1
 
         print()
         print("Would you like to add, delete, get AI suggestions to complete your task(s), view your tasks, or exit the program?")
@@ -78,7 +81,7 @@ def main():
             print("You may get suggestions from chatGPT's AI of how to complete your tasks, how to schedule your tasks, and etc.\n")
             print("For the best responses from the AI, give as much detail as possible for what you plan to do.")
             user_decision_for_ai = input("Please input your instructions here for the AI to utilize: ")
-            ai_response = gemini_response(f"Given the following tasks: {stored_tasks}, use the following instructions. {user_decision_for_ai}")
+            ai_response = gemini_response(stored_tasks, user_decision_for_ai)
             print()
             print(ai_response)
             print()
