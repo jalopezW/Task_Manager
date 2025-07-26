@@ -14,7 +14,9 @@ import csv
 
 def read_tasks():
     with open("user_tasks.csv") as csv_tasks:
-        csv_tasks.read()
+        for task in csv_tasks:
+            print(task)
+    csv_tasks.close()
 
     # test out how the tasks are appended to the task list
 def write_tasks(new_user_task: str):
@@ -22,12 +24,12 @@ def write_tasks(new_user_task: str):
         # if we were to use write/"w" it would overwrite anything inside of the file
     with open("user_tasks.csv", "a") as writing_task:
         writing_task.write(new_user_task)
+    writing_task.close()
 
 def main():
     if not os.path.exists("user_tasks.csv"):
         with open("user_tasks.csv", "w") as f:
             pass
-    stored_tasks = read_tasks()
     print("Welcome to your AI To-Do List Manager!")
     print("Please enter your name below or type \"exit\" to exit the task manager.")
     user_name = input("").capitalize()
@@ -38,22 +40,19 @@ def main():
 
     while True:
         # get rid of the stored tasks list????
-        if not stored_tasks:
+        if not read_tasks():
             print(f"Hi {user_name}. There are currently no tasks to complete.")
             new_task = input("Please enter a task here: ")
             write_tasks(new_task)
         else:
-            # might have to get rid of this else statement
-            # make this appear only when u want to see ur tasks, but I don't know
-
-            # change this to read all the tasks in the csv file
             print("These are all the current tasks you have to complete!")
-            read_tasks()
+            saved_tasks = read_tasks()
+            for index, task in enumerate(saved_tasks, 0):
+                print(f"Task { index + 1 }: { task }")
             # task_index = 0
             # while task_index < len(stored_tasks):
             #     print(f"Task {task_index + 1}:", stored_tasks[task_index])
             #     task +=1
-
         print()
         print("Would you like to add, delete, get AI suggestions to complete your task(s), view your tasks, or exit the program?")
         print("Enter 1 to add a task")
@@ -66,8 +65,9 @@ def main():
 
         if "1" in user_decision:
             user_adding_task = input("Please input your task: ")
-            stored_tasks.append(user_adding_task)
+            write_tasks(user_adding_task)
             print()
+        # IMPLEMENT A WAY TO GET RID OF A SPECIFIC TASK IN THE CSV FILE
         elif "2" in user_decision:
             print("Please enter the exact task you would like to erase from the task list.")
             user_deleting_task = input("Do so here: ")
