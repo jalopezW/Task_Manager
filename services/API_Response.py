@@ -9,7 +9,7 @@ client = genai.Client(api_key=gemini_key)
 def gemini_response(user_tasks, user_instructions):
     response = client.models.generate_content(
     model="gemini-2.5-flash",
-    contents=f"Given the following tasks: {user_tasks}, use the following instructions. {user_instructions}",
+    contents=f"Use the following instructions for the given tasks. Instructions: {user_instructions}. Tasks: {user_tasks}",
     config=types.GenerateContentConfig(thinking_config=types.ThinkingConfig(thinking_budget=0))
     # Disabled thinking to keep costs low and also so i don't waste as many tokens
 )

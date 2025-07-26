@@ -3,16 +3,18 @@ from datetime import datetime
 import os
 import json
 import csv
-# Dictionaries have key-value pairs, lists store elements. Dictionaries need keys to access their values, while lists need index.
 # extensions:
 # put this on git and use vscode: Complete!
-# soothing music, possibly an image in background, view tasks that are completed, database to store tasks offline to complete, 
-# take in multiple tasks at once by parsing string and splitting at comma, : NEXT!
+# MOST IMPORTANT CHECKPOINT: IMPROVE LOGIC FOR CSV FILE!!!
+# soothing music: NEXT
+# view tasks that are completed: NEXT
+# database to store tasks offline to complete: NEXT 
+# take in multiple tasks at once by parsing string and splitting at comma: NEXT!
 # port this project over to github: Complete!
-# decompose this better i guess: NEXT?
-# store tasks in a csv file containing the following: completed, uncompleted, priority: NEXT?
+# store tasks in a csv file containing the following: completed, uncompleted, priority: NEXT
 
 def read_tasks():
+    # second parameter for open defaults to "r" which means to read the file
     with open("user_tasks.csv") as csv_tasks:
         for task in csv_tasks:
             print(task)
@@ -25,6 +27,13 @@ def write_tasks(new_user_task: str):
     with open("user_tasks.csv", "a") as writing_task:
         writing_task.write(new_user_task)
     writing_task.close()
+
+def delete_task(task_to_del: str):
+    with open("user_tasks.csv", "w") as user_tasks:
+        for task in user_tasks:
+            if task == task_to_del:
+                user_tasks.remove(task)
+    user_tasks.close()
 
 def main():
     if not os.path.exists("user_tasks.csv"):
@@ -75,13 +84,13 @@ def main():
             # task_to_delete = stored_tasks.index(user_deleting_task)
             # stored_tasks.pop(task_to_delete) # pop takes the index of the element u want to delete
             # put a try and else block here if the task is not found within the task list
-            stored_tasks.remove(user_deleting_task)
+            delete_task(user_deleting_task)
             print()
         elif "3" in user_decision:
             print("You may get suggestions from chatGPT's AI of how to complete your tasks, how to schedule your tasks, and etc.\n")
             print("For the best responses from the AI, give as much detail as possible for what you plan to do.")
             user_decision_for_ai = input("Please input your instructions here for the AI to utilize: ")
-            ai_response = gemini_response(stored_tasks, user_decision_for_ai)
+            ai_response = gemini_response(read_tasks(), user_decision_for_ai)
             print()
             print(ai_response)
             print()
