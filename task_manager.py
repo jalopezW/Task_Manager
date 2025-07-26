@@ -90,6 +90,7 @@ def main():
             print("You may get suggestions from chatGPT's AI of how to complete your tasks, how to schedule your tasks, and etc.\n")
             print("For the best responses from the AI, give as much detail as possible for what you plan to do.")
             user_decision_for_ai = input("Please input your instructions here for the AI to utilize: ")
+            # POSSIBLY CHANGE THE FUNCTION PARAMETER TAKING IN THE FUNCTION BC THE FUNCTION ONLY PRINTS ALL THE TASKS IN THE CSV FILE
             ai_response = gemini_response(read_tasks(), user_decision_for_ai)
             print()
             print(ai_response)
