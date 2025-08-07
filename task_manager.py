@@ -6,7 +6,6 @@ import csv
 # extensions:
 # put this on git and use vscode: Complete!
 # MOST IMPORTANT CHECKPOINT: IMPROVE LOGIC FOR CSV FILE!!!
-# soothing music: NEXT
 # view tasks that are completed: NEXT
 # database to store tasks offline to complete: NEXT 
 # take in multiple tasks at once by parsing string and splitting at comma: NEXT!
@@ -14,21 +13,35 @@ import csv
 # store tasks in a csv file containing the following: completed, uncompleted, priority: NEXT
 
 def read_tasks():
+    """
+    This function reads and prints each task within the user_tasks.csv file.
+    """
     # second parameter for open defaults to "r" which means to read the file
+    user_tasks = list()
     with open("user_tasks.csv") as csv_tasks:
+        reader = csv.reader(csv_tasks)
         for task in csv_tasks:
-            print(task)
+            if task:
+                user_tasks.append(task)
     csv_tasks.close()
+    return user_tasks
 
     # test out how the tasks are appended to the task list
 def write_tasks(new_user_task: str):
+    """
+    This function takes a task input fromm the user and writes the given data to the user_tasks.csv file.
+    """
         # the second parameter "a" appends a task to the end of the file
         # if we were to use write/"w" it would overwrite anything inside of the file
     with open("user_tasks.csv", "a") as writing_task:
         writing_task.write(new_user_task)
+    
     writing_task.close()
 
 def delete_task(task_to_del: str):
+    """
+    Placeholder description.
+    """
     with open("user_tasks.csv", "w") as user_tasks:
         for task in user_tasks:
             if task == task_to_del:
@@ -48,8 +61,9 @@ def main():
         return
 
     while True:
-        # get rid of the stored tasks list????
-        if not read_tasks():
+        # CHECK IF THERE IS ANYTHING WRITTEN TO THE CSV FILE
+        user_amount_of_tasks = read_tasks()
+        if len(user_amount_of_tasks) == 0:
             print(f"Hi {user_name}. There are currently no tasks to complete.")
             new_task = input("Please enter a task here: ")
             write_tasks(new_task)
@@ -69,15 +83,16 @@ def main():
         print("Enter 3 to get AI suggestions")
         print("Enter 4 to view your tasks")
         print("Enter 5 to exit the Task Manager")
-        # lower is absolute unnecessary, but, in case of future, might be helpful
+        # lower method is unnecessary, but, in case of future vision, might be helpful
         user_decision = input("Please input your decision here: ").lower()
 
-        if "1" in user_decision:
-            user_adding_task = input("Please input your task: ")
+        if user_decision == "1":
+            print("You may input a singular task or multiple at once, but separated with a comma")
+            user_adding_task = input("Add any tasks here: ")
             write_tasks(user_adding_task)
             print()
         # IMPLEMENT A WAY TO GET RID OF A SPECIFIC TASK IN THE CSV FILE
-        elif "2" in user_decision:
+        elif user_decision == "2":
             print("Please enter the exact task you would like to erase from the task list.")
             user_deleting_task = input("Do so here: ")
             # this line below is for the extension of viewing already completed tasks
@@ -86,7 +101,7 @@ def main():
             # put a try and else block here if the task is not found within the task list
             delete_task(user_deleting_task)
             print()
-        elif "3" in user_decision:
+        elif user_decision == "3":
             print("You may get suggestions from chatGPT's AI of how to complete your tasks, how to schedule your tasks, and etc.\n")
             print("For the best responses from the AI, give as much detail as possible for what you plan to do.")
             user_decision_for_ai = input("Please input your instructions here for the AI to utilize: ")
@@ -95,10 +110,10 @@ def main():
             print()
             print(ai_response)
             print()
-        elif "5" in user_decision:
+        elif user_decision == "5":
             print(f"Have a great day {user_name}!")
             break
-        elif "4" in user_decision:
+        elif user_decision == "4":
             # POSSIBLY JUST LIST ALL TASKS AND PROMPT THE USER IF THEY WOULD LIKE TO EDIT THEIR TASKS
             continue
         else:
