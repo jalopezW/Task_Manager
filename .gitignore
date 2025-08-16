@@ -3,9 +3,7 @@
 .pyo
 __pycache__/
 .DS_store
-cool_time_stuff.py
-exercises.py
-greet.txt
 .log
 key_takeaways_from_this_project.txt
 my_api_key.env
+user_tasks.csv
