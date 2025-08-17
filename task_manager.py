@@ -4,6 +4,7 @@ import os
 import json
 import csv
 
+
 def read_tasks() -> list:
     """
     This function reads and prints each task within the user_tasks.csv file.
@@ -35,6 +36,7 @@ def delete_task(task_to_del: str):
     """
     with open("user_tasks.csv", "r") as all_tasks:
         current_line = all_tasks.readline().strip()
+    all_tasks.close()
     if not current_line:
         return
     tasks = [task.strip() for task in current_line.split(",") if task.strip()]
@@ -45,6 +47,8 @@ def delete_task(task_to_del: str):
             user_tasks_file.write(",".join(updated_tasks))
         else:
             user_tasks_file.write("")
+
+    user_tasks_file.close()
 
 def main():
     if not os.path.exists("user_tasks.csv"):
@@ -93,7 +97,6 @@ def main():
             user_adding_task = input("Add any tasks here: ")
             write_tasks(user_adding_task)
             print()
-        # IMPLEMENT A WAY TO GET RID OF A SPECIFIC TASK IN THE CSV FILE
         elif user_decision == "2":
             print("Please enter the exact task you would like to erase from the task list.")
             user_deleting_task = input("Do so here: ")
@@ -104,9 +107,6 @@ def main():
             print("You may get suggestions from chatGPT's AI of how to complete your tasks, how to schedule your tasks, and etc.\n")
             print("For the best responses from the AI, give as much detail as possible for what you plan to do.")
             user_decision_for_ai = input("Please input your instructions here for the AI to utilize: ")
-            
-            # POSSIBLY CHANGE THE FUNCTION PARAMETER TAKING IN THE FUNCTION BC THE FUNCTION ONLY PRINTS ALL THE TASKS IN THE CSV FILE
-            
             ai_response = gemini_response(read_tasks(), user_decision_for_ai)
             print()
             print(ai_response)
