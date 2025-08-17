@@ -33,12 +33,18 @@ def delete_task(task_to_del: str):
     """
     This function deletes a user inputted task from the user_tasks.csv file.
     """
-    # add comma to task string to delete?
-    with open("user_tasks.csv", "w") as user_tasks:
-        for task in user_tasks:
-            if task == task_to_del:
-                user_tasks.remove(task)
-    user_tasks.close()
+    with open("user_tasks.csv", "r") as all_tasks:
+        current_line = all_tasks.readline().strip()
+    if not current_line:
+        return
+    tasks = [task.strip() for task in current_line.split(",") if task.strip()]
+    updated_tasks = [task for task in tasks if task.lower() != task_to_del.strip().lower()]
+
+    with open("user_tasks.csv", "w") as user_tasks_file:
+        if updated_tasks:
+            user_tasks_file.write(",".join(updated_tasks))
+        else:
+            user_tasks_file.write("")
 
 def main():
     if not os.path.exists("user_tasks.csv"):
@@ -83,7 +89,7 @@ def main():
         user_decision = input("Please input your decision here: ").lower()
 
         if user_decision == "1":
-            print("You may input a singular task or multiple at once, but separated with a comma")
+            print("You may input a singular task or multiple at once, but separated with a comma.")
             user_adding_task = input("Add any tasks here: ")
             write_tasks(user_adding_task)
             print()
@@ -121,6 +127,7 @@ def main():
             print(f"Have a great day {user_name}!")
             break
         else:
+            print()
             print("Please input a valid command.")
             print()
 
