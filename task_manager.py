@@ -37,14 +37,18 @@ def delete_task(task_to_del: str):
     with open("user_tasks.csv", "r") as all_tasks:
         current_line = all_tasks.readline().strip()
     all_tasks.close()
+
     if not current_line:
         return
     tasks = [task.strip() for task in current_line.split(",") if task.strip()]
+    if not any(task.lower() == task_to_del.strip().lower() for task in tasks):
+        raise ValueError(f"\"{task_to_del}\" was not found in your task list.")
+    
     updated_tasks = [task for task in tasks if task.lower() != task_to_del.strip().lower()]
-
+    
     with open("user_tasks.csv", "w") as user_tasks_file:
         if updated_tasks:
-            user_tasks_file.write(",".join(updated_tasks))
+            user_tasks_file.write(",".join(updated_tasks) + ",")
         else:
             user_tasks_file.write("")
 
@@ -63,10 +67,10 @@ def main():
         return
 
     while True:
-        user_amount_of_tasks = read_tasks()
+        user_amount_of_tasks: list = read_tasks()
         if len(user_amount_of_tasks) == 0:
             print(f"\nHi {user_name}! There are currently no tasks to complete.")
-            new_task = input("Please enter a task here or input \"Exit\" to quit: ")
+            new_task = input("Please enter a task, or tasks separated by a comma, or input \"Exit\" to quit: ")
             if new_task.capitalize() == "Exit":
                     print("Now closing task manager...")
                     print("Goodbye!")
@@ -93,21 +97,24 @@ def main():
         user_decision = input("Please input your decision here: ").lower()
 
         if user_decision == "1":
-            print("You may input a singular task or multiple at once, but separated with a comma.")
-            user_adding_task = input("Add any tasks here: ")
-            write_tasks(user_adding_task)
+            print("You may input a singular task or multiple at once, but separated with a comma.)")
+            print("Also, do NOT add a space after inputting your tasks.")
+            user_adding_task: str = input("Add any tasks here: ")
+            write_tasks( user_adding_task )
             print()
         elif user_decision == "2":
             print("Please enter the exact task you would like to erase from the task list.")
-            user_deleting_task = input("Do so here: ")
-            # put a try and else block here if the task is not found within the task list
-            delete_task(user_deleting_task)
+            user_deleting_task: str = input("Do so here: ")
+            try:
+                delete_task(user_deleting_task)
+            except ValueError as error:
+                print(f"\nError! Task not found.\n:(\nPlease try deleting the task again.\nError Message: {error}")
             print()
         elif user_decision == "3":
             print("You may get suggestions from chatGPT's AI of how to complete your tasks, how to schedule your tasks, and etc.\n")
             print("For the best responses from the AI, give as much detail as possible for what you plan to do.")
-            user_decision_for_ai = input("Please input your instructions here for the AI to utilize: ")
-            ai_response = gemini_response(read_tasks(), user_decision_for_ai)
+            user_decision_for_ai: str = input("Please input your instructions here for the AI to utilize: ")
+            ai_response: str = gemini_response(read_tasks(), user_decision_for_ai)
             print()
             print(ai_response)
             print()
@@ -130,6 +137,7 @@ def main():
             print()
             print("Please input a valid command.")
             print()
+
 
 if __name__ == "__main__":
     main()

@@ -13,4 +13,7 @@ def gemini_response(user_tasks: list, user_instructions: str):
     config=types.GenerateContentConfig(thinking_config=types.ThinkingConfig(thinking_budget=0))
     # Disabled thinking to keep costs low and not utilize tokens
 )
-    return response
+    try:
+        return response.candidates[0].content.parts[0].text
+    except (AttributeError, IndexError):
+        return "The Gemini API didn't return a response."
