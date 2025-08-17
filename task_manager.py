@@ -4,11 +4,10 @@ import os
 import json
 import csv
 
-def read_tasks():
+def read_tasks() -> list:
     """
     This function reads and prints each task within the user_tasks.csv file.
     """
-    # second parameter for open defaults to "r" which means to read the file
     user_tasks = list()
     with open("user_tasks.csv") as csv_tasks:
         reader = csv.reader(csv_tasks)
@@ -17,15 +16,10 @@ def read_tasks():
     csv_tasks.close()
     return user_tasks
 
-    # test out how the tasks are appended to the task list
 def write_tasks(new_user_task: str):
     """
     This function takes a task input fromm the user and writes the given data to the user_tasks.csv file.
     """
-        # the second parameter "a" appends a task to the end of the file
-        # if we were to use write/"w" it would overwrite anything inside of the file
-    # add logic to check if single task or multiple with comma
-    # add a comma after a single task
     with open("user_tasks.csv", "a") as writing_task:
         if "," != new_user_task[-1]:
             new_user_task += ","
@@ -37,9 +31,9 @@ def write_tasks(new_user_task: str):
 
 def delete_task(task_to_del: str):
     """
-    Placeholder description.
+    This function deletes a user inputted task from the user_tasks.csv file.
     """
-    # add comma to task string to delete
+    # add comma to task string to delete?
     with open("user_tasks.csv", "w") as user_tasks:
         for task in user_tasks:
             if task == task_to_del:
@@ -51,7 +45,7 @@ def main():
         with open("user_tasks.csv", "w") as f:
             pass
     print("Welcome to your AI To-Do List Manager!")
-    print("Please enter your name below or type \"exit\" to exit the task manager.")
+    print("Please enter your name below or type \"Exit\" to exit the task manager.")
     user_name = input("").capitalize()
     if "Exit" in user_name:
         print("Now closing task manager...")
@@ -59,24 +53,25 @@ def main():
         return
 
     while True:
-        # CHECK IF THERE IS ANYTHING WRITTEN TO THE CSV FILE
         user_amount_of_tasks = read_tasks()
         if len(user_amount_of_tasks) == 0:
-            print(f"\nHi {user_name}. There are currently no tasks to complete.")
+            print(f"\nHi {user_name}! There are currently no tasks to complete.")
             new_task = input("Please enter a task here or input \"Exit\" to quit: ")
             if new_task.capitalize() == "Exit":
-                return
+                    print("Now closing task manager...")
+                    print("Goodbye!")
+                    return
             write_tasks(new_task)
         else:
-            # FIX THISSSSSS
+
             print("\nThese are all the current tasks you have to complete!")
-            saved_tasks = read_tasks()
-            for index, task in enumerate(saved_tasks, 0):
-                print(f"Task { index + 1 }: { task }")
-            # task_index = 0
-            # while task_index < len(stored_tasks):
-            #     print(f"Task {task_index + 1}:", stored_tasks[task_index])
-            #     task += 1
+            saved_tasks: list = read_tasks()
+            # the list comprehension checks for the single line of tasks in the csv file 
+            # then cleans the tasks and displays a more presentable output to the user
+            cleaned_up_tasks = [task.strip() for task in saved_tasks[0].split(",") if task.strip()]
+            for index, task in enumerate(cleaned_up_tasks, 1):
+                print(f"Task {index}: {task.capitalize()}")
+
         print()
         print("Would you like to add, delete, get AI suggestions to complete your task(s), view your tasks, or exit the program?")
         print("Enter 1 to add a task")
@@ -90,7 +85,7 @@ def main():
         if user_decision == "1":
             print("You may input a singular task or multiple at once, but separated with a comma")
             user_adding_task = input("Add any tasks here: ")
-            write_tasks("," + user_adding_task)
+            write_tasks(user_adding_task)
             print()
         # IMPLEMENT A WAY TO GET RID OF A SPECIFIC TASK IN THE CSV FILE
         elif user_decision == "2":
