@@ -1,6 +1,6 @@
 # Task_Manager
 
-A task manager project utizling data structures, and file I/O that I created to locally manage your daily tasks.
+A task manager project utizling data structures, and file I/O that I created to locally manage daily tasks.
 
 ## Setup
 
