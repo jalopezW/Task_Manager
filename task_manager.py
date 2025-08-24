@@ -14,7 +14,7 @@ def read_tasks() -> list:
         reader = csv.reader(csv_tasks)
         for task in csv_tasks:
                 user_tasks.append(task)
-    csv_tasks.close()
+
     return user_tasks
 
 def write_tasks(new_user_task: str):
@@ -28,7 +28,6 @@ def write_tasks(new_user_task: str):
         elif "," == new_user_task[-1]:
             writing_task.write(new_user_task)
     
-    writing_task.close()
 
 def delete_task(task_to_del: str):
     """
@@ -36,7 +35,6 @@ def delete_task(task_to_del: str):
     """
     with open("user_tasks.csv", "r") as all_tasks:
         current_line = all_tasks.readline().strip()
-    all_tasks.close()
 
     if not current_line:
         return
@@ -52,7 +50,6 @@ def delete_task(task_to_del: str):
         else:
             user_tasks_file.write("")
 
-    user_tasks_file.close()
 
 def main():
     if not os.path.exists("user_tasks.csv"):
